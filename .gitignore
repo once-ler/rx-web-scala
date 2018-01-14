@@ -1,1 +1,7 @@
 **/target
+**/.ensime
+**/*.log
+**/.ensime_cache
+**/.idea
+
+

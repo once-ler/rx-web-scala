@@ -1,25 +1,25 @@
 package rxweb
 
-type rxweb$OnNext = rxweb$Task => Unit
-type rxweb$OnError = Any => Unit
-type rxweb$OnCompleted = () => Unit
+import rx.lang.scala.{Observable}
+import rxweb.{rxweb$FilterFunc, rxweb$PromiseFunc, rxweb$OnNext, rxweb$OnError, rxweb$OnCompleted}
 
-class rxweb$Observer(o: Observable[rxweb$Task], filterFunc: rxweb$FilterFunc, promiseFunc: Option[rxweb$PromiseFunc]) {
-  private var observer = new Observable[rxweb$Task]
+class rxweb$Observer[A>:rxweb$Task](o: Observable[A], filterFunc: rxweb$FilterFunc, promiseFunc: Option[rxweb$PromiseFunc]) {
+  private var observer = new Observable[A]
 
   private val o$ = o.filter(filterFunc)
 
   if (rxweb$PromiseFunc.isEmpty) observer = o$
   else {
     observer = o$
-      .mergeMap(task: rxweb$Task => {
+      .flatMap(task: A => {
         // Await on the Future[rxweb$Task]
       })
   }
 
   def observable = observer
 
-  def subscribe(rxweb$OnNext, Option[rxweb$OnError], Option[rxweb$OnCompleted]) {
+  def subscribe(onNext: rxweb$OnNext, onError: Option[rxweb$OnError], onCompleted: Option[rxweb$OnCompleted]) {
     observer.subscribe(onNext, onError, onCompleted)
   }
 }
+

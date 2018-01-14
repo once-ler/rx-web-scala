@@ -1,9 +1,9 @@
 package rxweb
 
 trait rxweb$Base {
-  val = sub new rxweb$Subject
-  var middlewares = new collection.mutable.MutableList[rxweb$Middleware]()
-  var routes = new collection.mutable.MutableList[[rxweb$Route]()
+  val sub = new rxweb$Subject
+  var middlewares = new scala.collection.mutable.MutableList[rxweb$Middleware]()
+  var routes = new scala.collection.mutable.MutableList[rxweb$Route]()
 
   def next(value: rxweb$Task) { sub.next(value) }
 

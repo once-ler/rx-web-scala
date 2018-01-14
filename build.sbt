@@ -7,23 +7,20 @@ lazy val root = (project in file(".")).
     inThisBuild(List(
       organization := "com.eztier",
       scalaVersion := "2.12.4",
-      version      := "0.1.1"
+      version      := "0.1.2"
     )),
     name := "rx-web-scala",
-    libraryDependencies += scalaTest % Test
-    libraryDependencies += "io.reactivex" %% "rxscala" % "x.y.z"
     libraryDependencies ++= Seq(
+      scalaTest % Test,
+      "io.reactivex" %% "rxscala" % "0.26.5",
       "org.skinny-framework" %% "skinny-micro"             % skinnyMicroVersion,
-      "org.skinny-framework" %% "skinny-micro-jackson"     % skinnyMicroVersion,
-      "org.skinny-framework" %% "skinny-micro-jackson-xml" % skinnyMicroVersion,
       "org.skinny-framework" %% "skinny-micro-json4s"      % skinnyMicroVersion,
-      "org.skinny-framework" %% "skinny-micro-scalate"     % skinnyMicroVersion,
       "org.skinny-framework" %% "skinny-micro-server"      % skinnyMicroVersion
     )
   )
 
 lazy val commonSettings = Seq(
-  version := "0.1.0",
+  version := "0.1.2",
   organization := "com.eztier",
   scalaVersion := "2.12.4",
   test in assembly := {}
