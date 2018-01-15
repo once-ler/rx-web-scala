@@ -9,7 +9,7 @@ trait rxweb$Base {
 
   def makeObserversAndSubscribeFromMiddlewares {
     for (m <- middlewares) {
-      val o = new rxweb$Observer(sub.asObservable(), m.filterFunc, m.promiseFunc)
+      val o = new rxweb$Observer(sub observable, m.filterFunc, m.promiseFunc)
       o.subscribe(m.subscribeFunc)
     }
   }

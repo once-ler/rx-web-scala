@@ -7,7 +7,7 @@ lazy val root = (project in file(".")).
     inThisBuild(List(
       organization := "com.eztier",
       scalaVersion := "2.12.4",
-      version      := "0.1.2"
+      version      := "0.1.3"
     )),
     name := "rx-web-scala",
     libraryDependencies ++= Seq(
@@ -20,7 +20,7 @@ lazy val root = (project in file(".")).
   )
 
 lazy val commonSettings = Seq(
-  version := "0.1.2",
+  version := "0.1.3",
   organization := "com.eztier",
   scalaVersion := "2.12.4",
   test in assembly := {}
