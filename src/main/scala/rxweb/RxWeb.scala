@@ -4,7 +4,7 @@ trait rxweb$Task {
   var typeName: String
   var data: Any
   var next: rxweb$NextAction
-  var context: rxweb$Context
+  var context: rxweb$ExecutionContext
 }
 
 class rxweb$Middleware[A>:rxweb$Task](var typeName: String, var filterFunc: rxweb$FilterFunc[A], var subscribeFunc: rxweb$SubscribeFunc, var promiseFunc: Option[rxweb$PromiseFunc]) {
@@ -13,5 +13,5 @@ class rxweb$Middleware[A>:rxweb$Task](var typeName: String, var filterFunc: rxwe
   }
 }
 
-class rxweb$Route[A>:rxweb$WebAction](expression: String, action: A)
+class rxweb$Route[A>:rxweb$WebAction](var expression: String, var action: A)
 
