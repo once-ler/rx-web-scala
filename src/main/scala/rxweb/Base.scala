@@ -1,11 +1,11 @@
-package rxweb
+package org.rxweb
 
 import scala.collection.mutable._
 
 trait rxweb$Base[A>:rxweb$Task] {
   val sub = new rxweb$Subject
-  var middlewares = MutableList[rxweb$Middleware[A]]()
-  var routes = MutableList[rxweb$Route[A]]()
+  var middlewares = ArrayBuffer[rxweb$Middleware[A]]()
+  var routes = ArrayBuffer[rxweb$Route[A]]()
 
   def next(value: rxweb$Task) { sub.next(value) }
 

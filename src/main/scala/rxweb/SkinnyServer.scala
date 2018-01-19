@@ -1,4 +1,4 @@
-package rxweb
+package org.rxweb
 
 import skinny.micro.AsyncWebApp
 import skinny.micro.contrib.json4s.JSONSupport
@@ -10,6 +10,10 @@ class WebTask extends rxweb$Task {
   override var data: Any = _
   override var context: rxweb$ExecutionContext = _
   override var typeName: String = _
+}
+
+object WebTask {
+  def apply(): WebTask = new WebTask()
 }
 
 class SkinnyServer extends AsyncWebApp with JSONSupport with rxweb$Base[WebTask] {
@@ -25,4 +29,8 @@ class SkinnyServer extends AsyncWebApp with JSONSupport with rxweb$Base[WebTask]
     makeObserversAndSubscribeFromMiddlewares
     applyRoutes
   }
+}
+
+object SkinnyServer {
+  def apply(): SkinnyServer = new SkinnyServer()
 }

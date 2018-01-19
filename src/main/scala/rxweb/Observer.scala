@@ -1,4 +1,4 @@
-package rxweb
+package org.rxweb
 
 import rx.lang.scala._
 
