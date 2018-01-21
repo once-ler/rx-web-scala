@@ -1,9 +1,9 @@
 package org.rxweb
 
-import rx.lang.scala.subjects.AsyncSubject
+import rx.lang.scala.subjects.BehaviorSubject
 
 class rxweb$Subject[A<:rxweb$Task] {
-  private val subject = AsyncSubject[A]()
+  private val subject = BehaviorSubject[A]()
   subject.publish
 
   def next(value: A) { subject.onNext(value) }

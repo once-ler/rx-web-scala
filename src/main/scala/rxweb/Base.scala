@@ -3,7 +3,7 @@ package org.rxweb
 import scala.collection.mutable._
 
 trait rxweb$Base[A<:rxweb$Task] {
-  val sub = rxweb$Subject[A]()
+  val sub = rxweb$Subject[A]
   var rxweb$Middlewares = ArrayBuffer[rxweb$Middleware[A]]()
   var rxweb$Routes = ArrayBuffer[rxweb$Route]()
 

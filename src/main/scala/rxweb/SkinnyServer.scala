@@ -4,27 +4,43 @@ import skinny.micro.{AsyncWebApp, WebServer}
 import skinny.micro.context.SkinnyContext
 import skinny.micro.contrib.json4s.JSONSupport
 
-class WebTask extends rxweb$Task {
-  override var next: rxweb$NextAction = _
-  override var data: Any = _
-  override var context: rxweb$ExecutionContext = _
-  override var typeName: String = _
+import scala.concurrent.Future
+
+class WebTask(var typeName: String, anyData: Option[Any] = None, nextFunc: Option[rxweb$NextAction] = None) extends rxweb$Task {
+  def this(typeName: String, data: Any) = { this(typeName, Some(data), None) }
+
+  override var data: Any = anyData match {
+    case Some(f) => f
+    case None => ""
+  }
+
+  override var next: rxweb$NextAction = nextFunc match {
+    case Some(f) => f
+    case None => _ => Unit
+  }
 }
 
 object WebTask {
-  def apply(): WebTask = new WebTask()
+  def apply(typeName: String): WebTask = new WebTask(typeName)
+}
+
+object Middleware0 {
+  type $renderResponseBody = Any => Unit
+
+  def test(t: Any, sub: rxweb$Subject[WebTask], respond: $renderResponseBody)(implicit ctx: SkinnyContext) {
+    sub.next(WebTask("b"))
+
+    respond("ABCDEFGHIJK")
+  }
 }
 
 class SkinnyServer extends AsyncWebApp with JSONSupport with rxweb$Base[WebTask] {
 
   def apply: SkinnyServer = new SkinnyServer
 
-  def test(t: Any)(implicit ctx: SkinnyContext) {
-    renderResponseBody("ABCDEFG")
-  }
-
   def test2()(implicit ctx: SkinnyContext): Unit = {
-    test(1)
+    sub.next(WebTask("a"))
+    Middleware0.test(1, sub, renderResponseBody)
   }
 
   get("/foo") {
