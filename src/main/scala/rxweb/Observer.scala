@@ -2,10 +2,12 @@ package org.rxweb
 
 import rx.lang.scala._
 
-class rxweb$Observer[A>:rxweb$Task](o: Observable[A], filterFunc: rxweb$FilterFunc[A], promiseFunc: Option[rxweb$PromiseFunc]) {
+class rxweb$Observer[A<:rxweb$Task](o: Observable[A], filterFunc: rxweb$FilterFunc[A], subscribeFunc: rxweb$SubscribeFunc[A], promiseFunc: Option[rxweb$PromiseFunc[A]]) {
   private val o$ = o filter filterFunc
 
   def observable = o$
+
+  def subscribe() = o$.subscribe(subscribeFunc)
 
   def subscribe(onNext: rxweb$OnNext[A]) = o$.subscribe(onNext)
 
@@ -15,6 +17,6 @@ class rxweb$Observer[A>:rxweb$Task](o: Observable[A], filterFunc: rxweb$FilterFu
 }
 
 object rxweb$Observer {
-  def apply[A>:rxweb$Task](o: Observable[A], filterFunc: rxweb$FilterFunc[A], promiseFunc: Option[rxweb$PromiseFunc]) = new rxweb$Observer(o, filterFunc, promiseFunc)
+  def apply[A<:rxweb$Task](o: Observable[A], filterFunc: rxweb$FilterFunc[A], subscribeFunc: rxweb$SubscribeFunc[A], promiseFunc: Option[rxweb$PromiseFunc[A]]) = new rxweb$Observer(o, filterFunc, subscribeFunc, promiseFunc)
 }
 

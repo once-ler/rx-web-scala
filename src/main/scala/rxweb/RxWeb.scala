@@ -7,21 +7,21 @@ trait rxweb$Task {
   var context: rxweb$ExecutionContext
 }
 
-class rxweb$Middleware[A>:rxweb$Task](var typeName: String, var filterFunc: rxweb$FilterFunc[A], var subscribeFunc: rxweb$SubscribeFunc, var promiseFunc: Option[rxweb$PromiseFunc]) {
-  def this(typeName: String, filterFunc: rxweb$FilterFunc[A], subscribeFunc: rxweb$SubscribeFunc) {
-    this(typeName, filterFunc, subscribeFunc)
+class rxweb$Middleware[A<:rxweb$Task](var filterFunc: rxweb$FilterFunc[A], var subscribeFunc: rxweb$SubscribeFunc[A], var promiseFunc: Option[rxweb$PromiseFunc[A]]) {
+  def this(filterFunc: rxweb$FilterFunc[A], subscribeFunc: rxweb$SubscribeFunc[A]) {
+    this(filterFunc, subscribeFunc, None)
   }
 }
 
 object rxweb$Middleware {
-  def apply[A>:rxweb$Task](typeName: String, filterFunc: rxweb$FilterFunc[A], subscribeFunc: rxweb$SubscribeFunc, promiseFunc: Option[rxweb$PromiseFunc])
-    = new rxweb$Middleware[A](typeName, filterFunc, subscribeFunc, promiseFunc)
-  def apply[A>:rxweb$Task](typeName: String, filterFunc: rxweb$FilterFunc[A], subscribeFunc: rxweb$SubscribeFunc)
-    = new rxweb$Middleware[A](typeName, filterFunc, subscribeFunc)
+  def apply[A<:rxweb$Task](filterFunc: rxweb$FilterFunc[A], subscribeFunc: rxweb$SubscribeFunc[A], promiseFunc: Option[rxweb$PromiseFunc[A]])
+    = new rxweb$Middleware[A](filterFunc, subscribeFunc, promiseFunc)
+  def apply[A<:rxweb$Task](filterFunc: rxweb$FilterFunc[A], subscribeFunc: rxweb$SubscribeFunc[A])
+    = new rxweb$Middleware[A](filterFunc, subscribeFunc, None)
 }
 
-class rxweb$Route[A>:rxweb$WebAction](var expression: String, var action: A)
+class rxweb$Route(var expression: String, var action: rxweb$WebAction)
 
 object rxweb$Route {
-  def apply[A>:rxweb$WebAction](expression: String, action: A) = new rxweb$Route[A](expression, action)
+  def apply(expression: String, action: rxweb$WebAction) = new rxweb$Route(expression, action)
 }
