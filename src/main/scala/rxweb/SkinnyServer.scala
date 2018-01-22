@@ -4,10 +4,13 @@ import skinny.micro.{AsyncWebApp, WebServer}
 import skinny.micro.context.SkinnyContext
 import skinny.micro.contrib.json4s.JSONSupport
 
-import scala.concurrent.Future
+trait ShadowSkinny {
+  var server: SkinnyServer
+  var respond: Any => Unit
+}
 
-class WebTask(var typeName: String, anyData: Option[Any] = None, nextFunc: Option[rxweb$NextAction] = None) extends rxweb$Task {
-  def this(typeName: String, data: Any) = { this(typeName, Some(data), None) }
+class WebTask(var typeName: String, var server: SkinnyServer, var respond: Any => Unit, anyData: Option[Any] = None, nextFunc: Option[rxweb$NextAction] = None) extends rxweb$Task with ShadowSkinny {
+  def this(typeName: String, server: SkinnyServer, respond: Any => Unit, data: Any) = { this(typeName, server, respond, Some(data), None) }
 
   override var data: Any = anyData match {
     case Some(f) => f
@@ -21,16 +24,19 @@ class WebTask(var typeName: String, anyData: Option[Any] = None, nextFunc: Optio
 }
 
 object WebTask {
-  def apply(typeName: String): WebTask = new WebTask(typeName)
+  def apply(typeName: String, server: SkinnyServer, respond: Any => Unit): WebTask = new WebTask(typeName, server, respond)
 }
 
 object Middleware0 {
-  type $renderResponseBody = Any => Unit
+  type $renderResponse = Any => Unit
 
-  def test(t: Any, sub: rxweb$Subject[WebTask], respond: $renderResponseBody)(implicit ctx: SkinnyContext) {
-    sub.next(WebTask("b"))
+  def test(t: Any, sub: rxweb$Subject[WebTask], respond: $renderResponse, server: SkinnyServer)(implicit ctx: SkinnyContext) {
+    val resp = server.toJSONString(Map("foo" -> "bar"))
+    server.contentType = "application/json"
+    sub.next(WebTask("b", server, respond))
+    // ctx.response.setStatus((200))
 
-    respond("ABCDEFGHIJK")
+    respond(resp)
   }
 }
 
@@ -39,8 +45,8 @@ class SkinnyServer extends AsyncWebApp with JSONSupport with rxweb$Base[WebTask]
   def apply: SkinnyServer = new SkinnyServer
 
   def test2()(implicit ctx: SkinnyContext): Unit = {
-    sub.next(WebTask("a"))
-    Middleware0.test(1, sub, renderResponseBody)
+    sub.next(WebTask("a", this, renderResponse))
+    Middleware0.test(1, sub, renderResponse, this)
   }
 
   get("/foo") {
