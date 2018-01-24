@@ -1,7 +1,9 @@
 import Dependencies._
 
 lazy val skinnyMicroVersion = "1.3.+"
+lazy val rxScalaVersion = "0.26.5"
 
+/*
 lazy val root = (project in file(".")).
   settings(
     inThisBuild(List(
@@ -18,6 +20,7 @@ lazy val root = (project in file(".")).
       "org.skinny-framework" %% "skinny-micro-server"      % skinnyMicroVersion
     )
   )
+*/
 
 lazy val commonSettings = Seq(
   version := "0.1.9",
@@ -26,14 +29,33 @@ lazy val commonSettings = Seq(
   test in assembly := {}
 )
 
+lazy val root = (project in file(".")).
+  settings(commonSettings: _*).
+  settings(
+    name := "rx-web-scala",
+    libraryDependencies ++= Seq(
+      scalaTest % Test,
+      "io.reactivex" %% "rxscala" % rxScalaVersion
+    ),
+    assemblyJarName in assembly := "rx-web-scala.jar"
+  )
+
 lazy val app = (project in file("app")).
   settings(commonSettings: _*).
   settings(
-    mainClass in assembly := Some("com.eztier.Main")
+    name := "app",
+    libraryDependencies ++= Seq(
+      scalaTest % Test,
+      "org.skinny-framework" %% "skinny-micro"             % skinnyMicroVersion,
+      "org.skinny-framework" %% "skinny-micro-json4s"      % skinnyMicroVersion,
+      "org.skinny-framework" %% "skinny-micro-server"      % skinnyMicroVersion
+    ),
+    mainClass in assembly := Some("org.rxweb.Main")
   )
 
 lazy val utils = (project in file("utils")).
   settings(commonSettings: _*).
   settings(
+    name := "utils",
     assemblyJarName in assembly := "utils.jar"
   )
