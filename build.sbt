@@ -40,6 +40,8 @@ lazy val root = (project in file(".")).
     assemblyJarName in assembly := "rx-web-scala.jar"
   )
 
+// sbt "project app" package
+
 lazy val app = (project in file("app")).
   settings(commonSettings: _*).
   settings(
@@ -51,7 +53,8 @@ lazy val app = (project in file("app")).
       "org.skinny-framework" %% "skinny-micro-server"      % skinnyMicroVersion
     ),
     mainClass in assembly := Some("org.rxweb.Main")
-  )
+  ).
+  dependsOn(root)
 
 lazy val utils = (project in file("utils")).
   settings(commonSettings: _*).
