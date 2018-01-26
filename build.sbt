@@ -23,7 +23,7 @@ lazy val root = (project in file(".")).
 */
 
 lazy val commonSettings = Seq(
-  version := "0.1.9",
+  version := "0.1.10",
   organization := "com.eztier",
   scalaVersion := "2.12.4",
   test in assembly := {}

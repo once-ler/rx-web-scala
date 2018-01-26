@@ -7,7 +7,11 @@ object Index extends App {
   val rxServer = SkinnyServer()
 
   val m0 = rxweb$Middleware[WebTask]((t: WebTask) => t.typeName == "a", (t: WebTask) => println(t.typeName) )
-  val m1 = rxweb$Middleware[WebTask]((t: WebTask) => t.typeName == "b", (t: WebTask) => println(t.typeName) )
+  val m1 = rxweb$Middleware[WebTask]((t: WebTask) => t.typeName == "b", (t: WebTask) => {
+    println(t.typeName);
+    val u = WebTask("c", "", t.server, t.respond)
+    t.next(u)
+  })
   val m2 = rxweb$Middleware[WebTask]((t: WebTask) => t.typeName == "c", (t: WebTask) => println(t.typeName) )
 
   val a = (t: String) => "a"
